@@ -1,33 +1,38 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: #111;
-  color: #fff;
+  background: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
 }
 
 h1 {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .soundboard {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 40px;
   gap: 15px;
 }
 
 button {
+  font-size: 18px;
   padding: 15px 25px;
-  font-size: 16px;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  background: #444;
+  background: #0077ff;
   color: white;
-  transition: background 0.2s;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 button:hover {
-  background: #666;
+  background: #005fcc;
+}
+
+button:active {
+  transform: scale(0.95);
 }
