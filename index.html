@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sound Board</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <h1>Sound Board</h1>
+
+  <!-- TEMP: direct file test. Delete later if you want -->
+  <audio id="test-audio" src="./sounds/applause.mp3" controls></audio>
 
   <div class="soundboard">
     <button data-sound="applause">👏 Applause</button>
@@ -18,7 +21,7 @@
     <button data-sound="wrong">❌ Wrong</button>
   </div>
 
-  <!-- load your script -->
+  <!-- load script at end -->
   <script src="./script.js"></script>
 </body>
 </html>
