@@ -1,62 +1,67 @@
-// === Soundboard loader with fallback & logging ===
-const SOUND_NAMES = ["applause","boo","gasp","tada","victory","wrong"];
-
-// Preload all sounds
+// Robust soundboard script with Safari/Chrome autoplay handling + logging
+const NAMES = ["applause","boo","gasp","tada","victory","wrong"];
 const sounds = {};
-SOUND_NAMES.forEach(name => {
-  const path = `./sounds/${name}.mp3`;   // expects sounds/*.mp3 at repo root
-  const a = new Audio(path);
+let audioCtx;
 
-  // If file can't load, mark missing (we'll beep instead so UI isn't silent)
-  a.addEventListener("error", () => {
-    console.error(`❌ Missing or unreachable: ${path}`);
-    a._missing = true;
-  });
-
-  sounds[name] = a;
-});
-
-// Simple beep fallback so clicks still give feedback if a file is missing
-function beepFallback() {
-  try {
-    const ac = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-    osc.connect(gain);
-    gain.connect(ac.destination);
-    osc.type = "square";
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.2, ac.currentTime);
-    osc.start();
-    osc.stop(ac.currentTime + 0.12);
-  } catch (e) {
-    console.warn("Fallback beep unavailable:", e);
+// Some browsers need an explicit resume of AudioContext on first click
+function ensureCtx() {
+  if (!audioCtx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (Ctx) audioCtx = new Ctx();
   }
+  if (audioCtx && audioCtx.state === "suspended") {
+    return audioCtx.resume().catch(()=>{});
+  }
+  return Promise.resolve();
 }
 
-// Delegate clicks: any element with [data-sound="applause"] etc.
+// Preload HTMLAudioElements (simple & reliable)
+NAMES.forEach(n => {
+  const p = `./sounds/${n}.mp3`;
+  const a = new Audio(p);
+  a.preload = "auto";
+  a.addEventListener("error", () => {
+    console.error(`❌ Could not load: ${p} (check filename/case/path)`);
+    a._missing = true;
+  });
+  sounds[n] = a;
+});
+
+// Tiny beep fallback so you still hear something if a file is missing
+function beep() {
+  try {
+    ensureCtx().then(() => {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      osc.type = "square";
+      osc.frequency.value = 880;
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    });
+  } catch {}
+}
+
+// Global click handler
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-sound]");
   if (!btn) return;
 
   const name = btn.getAttribute("data-sound");
-  const audio = sounds[name];
-
-  if (!audio) {
-    console.error(`⚠️ Unknown sound name: ${name}. Add it to SOUND_NAMES and provide ${name}.mp3`);
-    beepFallback();
-    return;
+  const a = sounds[name];
+  if (!a) {
+    console.error(`⚠️ Unknown sound '${name}'. Add the mp3 and include it in NAMES.`);
+    return beep();
   }
 
-  if (audio._missing) {
-    // file not found or blocked
-    beepFallback();
-    return;
-  }
-
-  audio.currentTime = 0;
-  audio.play().catch(err => {
-    console.error(`⚠️ Could not play ./sounds/${name}.mp3`, err);
-    beepFallback();
+  ensureCtx().then(() => {
+    if (a._missing) return beep();
+    a.currentTime = 0;
+    a.play().catch(err => {
+      console.error(`⚠️ Could not play ./sounds/${name}.mp3`, err);
+      beep();
+    });
   });
 });
