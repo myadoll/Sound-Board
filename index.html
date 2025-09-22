@@ -4,24 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sound Board</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <h1>Sound Board</h1>
 
-  <!-- TEMP: direct file test. Delete later if you want -->
-  <audio id="test-audio" src="./sounds/applause.mp3" controls></audio>
-
   <div class="soundboard">
-    <button data-sound="applause">👏 Applause</button>
-    <button data-sound="boo">😡 Boo</button>
-    <button data-sound="gasp">😲 Gasp</button>
-    <button data-sound="tada">🎉 Tada</button>
-    <button data-sound="victory">🏆 Victory</button>
-    <button data-sound="wrong">❌ Wrong</button>
+    <button data-sfx="applause">👏 Applause</button>
+    <button data-sfx="gasp">😲 Gasp</button>
+    <button data-sfx="boo">😡 Boo</button>
+    <button data-sfx="tada">🎉 Tada</button>
+    <button data-sfx="victory">🏆 Victory</button>
+    <button data-sfx="wrong">❌ Wrong</button>
   </div>
 
-  <!-- load script at end -->
   <script src="./script.js"></script>
 </body>
 </html>
