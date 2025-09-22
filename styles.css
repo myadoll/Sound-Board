@@ -1,38 +1,21 @@
+:root { --bg:#0f1218; --fg:#e8eefc; --btn:#3a6df0; --btnHover:#2f56c4; }
+* { box-sizing: border-box; }
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+  margin: 0; padding: 32px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg); color: var(--fg); text-align: center;
 }
-
-h1 {
-  margin-bottom: 20px;
-}
-
+h1 { margin: 0 0 24px; font-weight: 700; letter-spacing: .3px; }
 .soundboard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
+  display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+  max-width: 900px; margin: 0 auto;
 }
-
 button {
-  font-size: 18px;
-  padding: 15px 25px;
-  border: none;
-  border-radius: 8px;
-  background: #0077ff;
-  color: white;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  padding: 16px 22px; min-width: 160px;
+  font-size: 18px; border: 0; border-radius: 10px;
+  background: var(--btn); color: white; cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+  transition: transform .06s ease, background .2s ease;
 }
-
-button:hover {
-  background: #005fcc;
-}
-
-button:active {
-  transform: scale(0.95);
-}
+button:hover { background: var(--btnHover); }
+button:active { transform: scale(.97); }
